@@ -1,0 +1,3 @@
+# don't track collection of links and logs
+data/links
+data/reactor.log
