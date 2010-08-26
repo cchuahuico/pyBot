@@ -1,3 +1,9 @@
+"""
+    datacollect.py
+
+    This class handles collecting and filtering data (messages) it receives.
+"""
+
 import re
 import urllib
 from datetime import datetime
