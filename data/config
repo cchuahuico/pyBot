@@ -1,0 +1,16 @@
+{
+    "user" : {
+        "nickname" : "Bobdroid",
+        "password" : "bolenjx"
+    },
+    "logs" : {
+        "reactor" : "/home/clarence/Projects/Python/IRCBot/data/reactor.log",
+        "links" : "/home/clarence/Projects/Python/IRCBot/data/links"
+    },
+    "server" : {
+        "host" : "irc.freenode.net",
+        "port" : 6667
+    },
+    "channels" : ["#python","#c","#c++"]
+}
+
