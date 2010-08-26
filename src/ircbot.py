@@ -3,6 +3,9 @@
 """
    ircbot.py
 
+   Handles all the protocols and factories. This is where the behavior of the bot is 
+   defined and it is where the bot is connected.
+
 """
 
 from sys import stdout
@@ -45,9 +48,9 @@ class IRCProtocol(irc.IRCClient):
         # and grabs the nickname       
         return user.partition('!')[0]
 
+    # disabled this method for now
     def userQuit(self, user, quitMessage):
-        if self.extract_nick(user) == "CodingDistrict":
-            print "CodingDistrict left freenode"
+        if self.extract_nick(user) == "":
             self.factory.stop_reactor()
 
 class IRCFactory(protocol.ClientFactory):

@@ -10,12 +10,7 @@ from datetime import datetime
 import codecs
 import sys
 from botconfig import BotConfig
-
-try:
-    from BeautifulSoup import BeautifulSoup
-except:
-    print "You need to have BeautifulSoup installed to collect links."
-    sys.exit(1)
+from BeautifulSoup import BeautifulSoup
 
 class DataCollector():
 

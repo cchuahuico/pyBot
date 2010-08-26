@@ -52,6 +52,8 @@ class BotConfig:
         self.bot_data["log"]["reactor"] = raw_input("Enter full path (incl. filename) of reactor log: ")
         self.bot_data["log"]["links"] = raw_input("Enter full path (incl. filename) for links collected: ")
         self.bot_data["channels"] = raw_input("Enter channels you want the bot to join: (ie. #python #c #java): ").split()
+
+        # dump the json data to the config file with nice formatting
         json.dump(self.bot_data, config, sort_keys=True, indent=4)
         config.flush()
         config.close()
