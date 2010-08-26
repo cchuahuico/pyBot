@@ -1,23 +1,29 @@
 #!/usr/bin/env python
 
+"""
+   ircbot.py
+
+"""
+
 from sys import stdout
 from twisted.python.log import startLogging
 from twisted.internet import reactor, protocol
 from twisted.words.protocols import irc
 import datacollect
+from botconfig import BotConfig
 
-REACTOR_PATH = "/home/clarence/Projects/Python/IRCBot/data/reactor.log"
+config = BotConfig()
 
 class IRCProtocol(irc.IRCClient):
-    nickname = "Bobdroid"
+    nickname = config.get_nick().encode("ascii")
 
     def signedOn(self):
         # Identify myself to NickServ so I can join
         # +r (must be registered) channels
-        self.msg("NickServ", "identify bolenjx")
+        self.msg("NickServ", "identify " + config.get_pass().encode("ascii"))
 
     def privmsg(self, user, channel, message):
-        """This method logs ALL messages by users in channel"""
+        # This method logs ALL messages by users in channel
 
         username = self.extract_nick(user)
 
@@ -29,7 +35,8 @@ class IRCProtocol(irc.IRCClient):
             self.join_channels()
 
     def join_channels(self):
-        for chan in ["#python", "#java", "#c", "#c++", "#ubuntu"]:
+        channels = map(lambda s: s.encode("ascii"), config.get_channels())
+        for chan in channels:
             self.join(chan)
 
     def extract_nick(self, user):
@@ -61,9 +68,9 @@ class IRCFactory(protocol.ClientFactory):
         self.collector.extract_links(username, channel, message)
 
 if __name__ == "__main__":
-    host, port = "irc.freenode.net", 6667
+    host, port = config.get_host(), int(config.get_port())
 
     # all output will be logged to reactor.log including errors and tracebacks
-    startLogging(open(REACTOR_PATH, "a"))
+    startLogging(open(config.get_reactor_path(), "a"))
     reactor.connectTCP(host, port, IRCFactory())
     reactor.run()

@@ -7,18 +7,25 @@
 import re
 import urllib
 from datetime import datetime
-from BeautifulSoup import BeautifulSoup
 import codecs
+import sys
+from botconfig import BotConfig
+
+try:
+    from BeautifulSoup import BeautifulSoup
+except:
+    print "You need to have BeautifulSoup installed to collect links."
+    sys.exit(1)
 
 class DataCollector():
-    """ This class will be in charge of collecting data and stats from messages 
-        from different channels"""
 
-    LINK_PATH = "/home/clarence/Projects/Python/IRCBot/data/"
-        
     def __init__(self):
+        self.config = BotConfig()
         try:
-            self.link_log = codecs.open(self.LINK_PATH + "links", "a", encoding="utf-8")
+            # Opening the links file with utf encoding is required because unicode data
+            # has to be written to the file at times -- specifically the em character (\u2014)
+            # which represents an underscore in the username
+            self.link_log = codecs.open(self.config.get_link_path(), "a", encoding="utf-8")
             self.link_log.write(self.get_date() + "\n")
         except IOError:
             "links log can't be opened."
@@ -45,20 +52,14 @@ class DataCollector():
                 self.link_log.flush()
 
     def close(self):
-        """General purpose clean up function called once connection to irc
-        is lost or terminated. It writes all links collected from the duration
-        of the run to a logfile"""
-
         self.link_log.close()
 
     def get_date(self):
-        """Return date in format: Sunday, August 01, 2010"""
-
+        # Return date in format: Sunday, August 01, 2010
         return datetime.now().strftime("%A, %B %d, %Y")
 
     def get_title(self, url):
-        """Get contents of <title> tag in the url"""
-
+        # Get contents of <title> tag in the url
         try:
             source = urllib.urlopen(url).read()
             return BeautifulSoup(source).title.text

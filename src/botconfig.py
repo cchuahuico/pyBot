@@ -14,12 +14,12 @@ class BotConfig:
 
     def __init__(self):
         # if config doesn't exist, create a new config file
-        if not os.path.exists(get_config_loc):
-            self.bot_data = {"user" : {"nickname" : "", "password" : ""}, "channels" : [], "logs" : \
+        if not os.path.exists(self.get_config_loc()):
+            self.bot_data = {"user" : {"nickname" : "", "password" : ""}, "channels" : [], "log" : \
                     {"links" : "", "reactor" : ""}, "server" : {"host" : "", "port" : ""}}
             self.create_config()
 
-        self.bot_data = json.load(open(get_config_loc, "r"))
+        self.bot_data = json.load(open(self.get_config_loc(), "r"))
 
     def get_nick(self):
         return self.bot_data["user"]["nickname"]
@@ -44,7 +44,7 @@ class BotConfig:
         return self.bot_data["server"]["port"]
 
     def create_config(self):
-        config = open(get_config_loc, "w")
+        config = open(self.get_config_loc(), "w")
         self.bot_data["server"]["host"] = raw_input("Enter server (ie. irc.freenode.net): ")     
         self.bot_data["server"]["port"] = raw_input("Enter port (ie. 6667): ")
         self.bot_data["user"]["nickname"] = raw_input("Enter nickname to be used by bot: ")
@@ -52,7 +52,8 @@ class BotConfig:
         self.bot_data["log"]["reactor"] = raw_input("Enter full path (incl. filename) of reactor log: ")
         self.bot_data["log"]["links"] = raw_input("Enter full path (incl. filename) for links collected: ")
         self.bot_data["channels"] = raw_input("Enter channels you want the bot to join: (ie. #python #c #java): ").split()
-        json.dump(self.bot_data, config)
+        json.dump(self.bot_data, config, sort_keys=True, indent=4)
+        config.flush()
         config.close()
 
     def get_config_loc(self):
